@@ -20,9 +20,6 @@
     "rlp": "2.1.0",
     "solidity-rlp": "2.0.0",
     "truffle": "5.0.12",
-    "truffle-hdwallet-provider": "1.0.6",
-    "web3": "1.0.0-beta.52",
-    "ganache-cli": "^6.4.1",
-    "solc": "0.5.7"
+    "ganache-cli": "^6.4.1"
   }
 }

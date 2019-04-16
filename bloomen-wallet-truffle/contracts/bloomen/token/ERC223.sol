@@ -37,8 +37,8 @@ contract ERC223 is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable, MovementH
   }
   
   function _transfer(address from, address to, uint256 value) internal {
-   // _addMovement(int(value) * -1, "send", from, to);
-   // _addMovement(int(value), "receive", to, from);
+    //_addMovement(int(value) * -1, "send", from, to);
+    //_addMovement(int(value), "receive", to, from);
     ERC20._transfer(from,to,value);
   }
 

@@ -9,10 +9,12 @@ contract MovementHistory {
         uint date;
         address to;
     }
-
+  /* 
     mapping (address => Movement[]) private transfersMap_;
     mapping (address => int256) private currentIndexMap_;
-    /*int256 constant private MAX = 100;
+
+ 
+    int256 constant private MAX = 100;
     int256 constant private PAGE_SIZE = 10;
     int256 constant private MAX_PAGE_NUMBER = MAX/PAGE_SIZE;
 
@@ -21,16 +23,16 @@ contract MovementHistory {
     }
     
     function _addMovement(int256 _amount, string memory _description,  address _from, address _to) internal {
-        if (transfersMap_[_from].length < uint256(MAX)) {
-            transfersMap_[_from].push(Movement(_amount, _description, now, _to));
-            currentIndexMap_[_from] = int256(transfersMap_[_from].length - 1);
-        } else if (currentIndexMap_[_from] == MAX - 1) {
-            currentIndexMap_[_from] = 0;
-            transfersMap_[_from][0] = Movement(_amount, _description, now, _to);
-        } else {
-            currentIndexMap_[_from]++;
-            transfersMap_[_from][uint256(currentIndexMap_[_from])] = Movement(_amount, _description, now, _to);
-        }
+        // if (transfersMap_[_from].length < uint256(MAX)) {
+        //     transfersMap_[_from].push(Movement(_amount, _description, now, _to));
+        //     currentIndexMap_[_from] = int256(transfersMap_[_from].length - 1);
+        // } else if (currentIndexMap_[_from] == MAX - 1) {
+        //     currentIndexMap_[_from] = 0;
+        //     transfersMap_[_from][0] = Movement(_amount, _description, now, _to);
+        // } else {
+        //     currentIndexMap_[_from]++;
+        //     transfersMap_[_from][uint256(currentIndexMap_[_from])] = Movement(_amount, _description, now, _to);
+        // }
     }
 
 
@@ -61,5 +63,7 @@ contract MovementHistory {
       
         return _transfersPage;
     }
+
     */
+    
 }
