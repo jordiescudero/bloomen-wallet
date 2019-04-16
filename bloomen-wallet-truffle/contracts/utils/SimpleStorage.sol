@@ -1,6 +1,6 @@
 // File: `./contracts/SimpleStorage.sol`
 
-pragma solidity ^0.4.17;
+pragma solidity ^0.5.2;
 
 contract SimpleStorage {
   uint public storedData;

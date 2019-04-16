@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "./lib/Structs.sol";
@@ -32,7 +32,7 @@ contract JsonContainerFactory is Structs {
     return tx.origin == _owner;
   }
 
-  function createContainer(bytes memory _in, string _name) onlyOwner public {
+  function createContainer(bytes memory _in, string memory _name) onlyOwner public {
     RLPReader.RLPItem memory item = _in.toRlpItem();
     RLPReader.RLPItem[] memory itemList = item.toList();
 
@@ -53,7 +53,7 @@ contract JsonContainerFactory is Structs {
     
   }
 
-  function getContainers() public view returns (Container[]) {
+  function getContainers() public view returns (Container[] memory) {
     return containers_;
   }
 

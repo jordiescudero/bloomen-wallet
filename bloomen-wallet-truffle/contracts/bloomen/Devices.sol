@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "./Assets.sol";
@@ -44,7 +44,8 @@ contract Devices  is Assets {
     bytes32[] memory devices = userDevices_[msg.sender].deviceArray;
 
     if (devices.length == 0 || transferIndex > devices.length - 1) {
-      return;
+      Device[] memory empty;
+      return empty;
     }
    
     uint256 returnCounter = 0;
@@ -67,11 +68,11 @@ contract Devices  is Assets {
     return ownerAddress;
   }
 
-  function handshake(bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string _dappId) public {
+  function handshake(bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string memory _dappId) public {
     _handshake(msg.sender, _deviceHash, _assetId, _schemaId, _lifeTime, _dappId, "");
   }
 
-  function handshake(bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string _dappId, string _description) public {
+  function handshake(bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string memory _dappId, string memory _description) public {
     _handshake(msg.sender, _deviceHash, _assetId, _schemaId, _lifeTime, _dappId, _description);
   }
 
@@ -80,7 +81,7 @@ contract Devices  is Assets {
   }
 
     
-  function _handshake(address _owner, bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string _dappId, string _description) internal {
+  function _handshake(address _owner, bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string memory _dappId, string memory _description) internal {
 
     require(Assets._checkOwnership(_owner, _assetId, _schemaId),"not allowed");
 

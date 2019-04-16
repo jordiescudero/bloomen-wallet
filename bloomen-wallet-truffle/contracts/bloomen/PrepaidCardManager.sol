@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -45,7 +45,7 @@ contract PrepaidCardManager is SignerRole, Ownable , Devices {
     require(cards_[_cardId].initialized == 0, "card_exist");
     require(cardsByHash_[_hash] == 0, "duplicated_hash");
 
-    _mint(this,_tokens);
+    _mint(address(this),_tokens);
     Card memory newCard = Card(_hash, _cardId, _tokens, false, msg.sender, 1);
     cards_[_cardId] = newCard;   
     cardsByHash_[_hash] = _cardId;
@@ -56,14 +56,14 @@ contract PrepaidCardManager is SignerRole, Ownable , Devices {
     cards_[_cardId].active=true;    
   }
 
-  function validateCard(bytes _secret) public {
+  function validateCard(bytes memory _secret) public {
     bytes32 hash = keccak256(_secret);
     uint256 cardId = cardsByHash_[hash];
     require(cardId > 0, "hash_not_found");
     require(cards_[cardId].active == true, "not_active");
     require(cards_[cardId].hash ==  hash, "wrong_secret");
   
-    _transfer(this, msg.sender,cards_[cardId].tokens);
+    _transfer(address(this), msg.sender,cards_[cardId].tokens);
     emit CardValidated(cards_[cardId].owner, cards_[cardId].cardId, msg.sender);
   
     delete cardsByHash_[hash];

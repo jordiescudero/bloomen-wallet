@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.5.2;
 
 
 import "../../../node_modules/openzeppelin-solidity/contracts/token/ERC20/ERC20Detailed.sol";
@@ -12,7 +12,7 @@ import "./MovementHistory.sol";
 import "./ERC223ReceivingContract.sol";
 
 contract ERC223 is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable, MovementHistory {
-  constructor (string _name, string _symbol, uint8 _decimals) public ERC20Detailed(_name, _symbol, _decimals){}
+  constructor (string memory _name, string memory _symbol, uint8 _decimals) public ERC20Detailed(_name, _symbol, _decimals){}
 
     // Overridden transfer method with _data param for transaction data
   function transfer(address _to, uint _value, uint256 _data) public {
@@ -37,8 +37,8 @@ contract ERC223 is ERC20, ERC20Detailed, ERC20Mintable, ERC20Burnable, MovementH
   }
   
   function _transfer(address from, address to, uint256 value) internal {
-    _addMovement(int(value) * -1, "send", from, to);
-    _addMovement(int(value), "receive", to, from);
+   // _addMovement(int(value) * -1, "send", from, to);
+   // _addMovement(int(value), "receive", to, from);
     ERC20._transfer(from,to,value);
   }
 

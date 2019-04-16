@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 contract MovementHistory {
@@ -12,7 +12,7 @@ contract MovementHistory {
 
     mapping (address => Movement[]) private transfersMap_;
     mapping (address => int256) private currentIndexMap_;
-    int256 constant private MAX = 100;
+    /*int256 constant private MAX = 100;
     int256 constant private PAGE_SIZE = 10;
     int256 constant private MAX_PAGE_NUMBER = MAX/PAGE_SIZE;
 
@@ -40,7 +40,8 @@ contract MovementHistory {
         uint256 _reqIndexOffset = uint256(PAGE_SIZE * (_page - 1));
         Movement[] memory transfers = transfersMap_[msg.sender];
         if (transfers.length <= _reqIndexOffset) {
-            return;
+            Movement[] memory empty;
+            return empty;
         }
 
 
@@ -60,4 +61,5 @@ contract MovementHistory {
       
         return _transfersPage;
     }
+    */
 }

@@ -1,4 +1,4 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.5.2;
 
 import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
@@ -22,7 +22,7 @@ contract Bloomen is Ownable{
     _dapps[_index]=_newAddress;
   }
 
-  function getDapps() view public returns(address[]) {
+  function getDapps() view public returns(address[] memory) {
     return _dapps;
   }
 

@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "./Schemas.sol";
@@ -36,11 +36,11 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
     return _checkOwnership(_target, _assetId, _schemaId);  
   }
 
-  function buy(uint256 _assetId, uint256 _schemaId, uint256 _amount, string _dappId) public  {
+  function buy(uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId) public  {
     _buy(msg.sender, _assetId, _schemaId, _amount, _dappId, "");  
   }
 
-  function buy(uint256 _assetId, uint256 _schemaId, uint256 _amount, string _dappId, string _description) public  {
+  function buy(uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId, string memory _description) public  {
     _buy(msg.sender, _assetId, _schemaId, _amount, _dappId, _description);  
   }
 
@@ -54,7 +54,8 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
     Asset[] memory assets = userAssets_[msg.sender].assets;
 
     if (assets.length == 0 || transferIndex > assets.length - 1) {
-      return;
+      Asset[] memory empty;
+      return empty ;
     }
 
     Asset[] memory assetsPage = new Asset[](PAGE_SIZE);  
@@ -70,14 +71,14 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
     return (assetsPage);
   }
 
-  function _buy(address _user, uint256 _assetId, uint256 _schemaId, uint256 _amount, string _dappId, string _description) internal  {
+  function _buy(address _user, uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId, string memory _description) internal  {
     Schema memory schema = Schemas.getSchema(_schemaId);
     require(schema.amount == _amount, "incorrect amount");    
     require(!_checkOwnership(_user, _assetId, _schemaId), "duplicated");
 
     if (_amount >0 ){
       // avoid money transfer on free assets
-      ERC223.transfer(this, _amount, _schemaId);
+      ERC223.transfer(address(this), _amount, _schemaId);
     }
   
     // registrar la compra

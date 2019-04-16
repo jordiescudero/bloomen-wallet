@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "../../node_modules/solidity-rlp/contracts/RLPReader.sol";
@@ -28,12 +28,12 @@ contract  Schemas is Ownable {
   mapping (uint256 => Schema) private schemas_;
   uint256[] private schemasArray_ ;
 
-  function getSchema(uint256 _schemaId) public view returns (Schema) {
+  function getSchema(uint256 _schemaId) public view returns (Schema memory) {
     require(schemas_[_schemaId].schemaId > 0, "not_exist");
     return (schemas_[_schemaId]);
   }
 
-  function getSchemas() public view returns (uint256[]) {    
+  function getSchemas() public view returns (uint256[] memory) {    
     return (schemasArray_);
   }
 
@@ -49,7 +49,7 @@ contract  Schemas is Ownable {
     _schemaStatus(_schemaId, true);  
   }
 
-  function _createSchema(uint256 _schemaId, bytes _in) internal  {
+  function _createSchema(uint256 _schemaId, bytes memory _in) internal  {
     // RLP format : [<expirationDate>,<schemaId>,<amount>,<assetLifeTime>,[ [<percent>,<address>,<description>],[<percent>,<address>,<description>]]]
 
     require(schemas_[_schemaId].schemaId == 0, "exist"); 
@@ -93,7 +93,7 @@ contract  Schemas is Ownable {
     schemas_[_schemaId].valid = _newStatus;
   }
 
-  function _validateClearingHouseRules(ClearingHouseRule[] clearingHouseRules) internal  {
+  function _validateClearingHouseRules(ClearingHouseRule[] storage clearingHouseRules) internal  {
     require(clearingHouseRules.length > 0, "not rules"); 
     uint listLength = clearingHouseRules.length;
     uint total = 0;

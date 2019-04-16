@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "./lib/Strings.sol";
@@ -32,7 +32,7 @@ contract JsonContainer is Structs {
     return tx.origin == _owner;
   }
 
-  function getData() public view returns (PathValue[]) {
+  function getData() public view returns (PathValue[] memory) {
     return data_;
   }
 
@@ -52,7 +52,7 @@ contract JsonContainer is Structs {
     }
   }
 
-  function initialize(PathValue[] _data) onlyOwner  public {
+  function initialize(PathValue[] memory _data) onlyOwner  public {
     uint dataLength = _data.length;
     for (uint i = 0;i < dataLength; i++) {
       PathValue memory pathValue = _data[i];
@@ -60,7 +60,7 @@ contract JsonContainer is Structs {
     }
   }
 
-  function _addPath(string _path, string _value, string _valueType) internal {
+  function _addPath(string memory _path, string memory _value, string memory _valueType) internal {
     bytes32 pathHash = keccak256(bytes(_path));
     uint[] memory indexArray = hashIndexMap_[pathHash];
     if (indexArray.length > 0) {
@@ -72,7 +72,7 @@ contract JsonContainer is Structs {
     }
     PathValue memory pathValue = PathValue(_path, _value, _valueType);
     uint dataLength = data_.length;
-    for (i = 0; i < dataLength; i++) {
+    for (uint8 i = 0; i < dataLength; i++) {
       if (data_[i].path.toSlice().empty()) {
         data_[i] = pathValue;
         hashIndexMap_[pathHash].push(i);
@@ -83,7 +83,7 @@ contract JsonContainer is Structs {
     hashIndexMap_[pathHash].push(data_.length - 1); 
   }
 
-  function _deletePath(string _path) internal {
+  function _deletePath(string memory _path) internal {
     bytes32 pathHash = keccak256(bytes(_path));
     uint[] memory indexArray = hashIndexMap_[pathHash];
     require(indexArray.length > 0, "Error: path does not exists.");
@@ -97,7 +97,7 @@ contract JsonContainer is Structs {
     }
   }
 
-  function _modifyPath(string _path, string _value, string _valueType) internal {
+  function _modifyPath(string memory _path, string memory _value, string memory _valueType) internal {
     bytes32 pathHash = keccak256(bytes(_path));
     uint[] memory indexArray = hashIndexMap_[pathHash];
     require(indexArray.length > 0, "Error: path does not exists.");
