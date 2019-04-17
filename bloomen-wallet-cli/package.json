@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "debug": "NODE_DEBUG=http node src/index.js"
   },
   "dependencies": {
     "commander": "2.15.1",
@@ -14,10 +15,10 @@
     "json-path-value": "0.0.1-beta8",
     "prettyjson": "^1.2.1",
     "qrcode-terminal": "^0.12.0",
-    "truffle-hdwallet-provider": "0.0.6",
+    "truffle-hdwallet-provider": "1.0.6",
     "underscore": "^1.9.1",
     "uuid": "^3.3.2",
-    "web3": "1.0.0-beta.36"
+    "web3": "1.0.0-beta.52"
   },
   "author": "",
   "license": "ISC"

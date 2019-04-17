@@ -7,7 +7,7 @@ module.exports = {
 
     development: {
       provider: () => new HDWalletProvider(process.env.DEVELOPMENT_MNEMONIC, "http://"+process.env.DEVELOPMENT_HOST+":"+ process.env.DEVELOPMENT_PORT),
-      network_id: "83584648538", // Match Alastria network id
+      network_id: "*", // Match Alastria network id
       gasPrice: 0,
       type: "quorum"
      },
