@@ -23,15 +23,20 @@ async function _sp1() {
     ];    
     let answer = await inquirer.prompt(questions);
     let randomId = Math.floor(Math.random() * (Math.pow(2, 50) - 1)) + 1;
-    
-    await  ctx.prepaidCardManager.methods.addCard(randomId, answer.amount, ctx.web3.utils.keccak256(answer.secret)).send(ctx.transactionObject)
-        .then((tx) => {
-            console.log('Transaction sent.');
-            return web3Ctx.checkTransaction(tx.transactionHash);
-        });
 
-    cards.push({ id: randomId, secret: answer.secret, active: false, points: answer.amount});
-    common.setCards(cards);    
+    return new Promise((resolve, reject) => {
+        ctx.prepaidCardManager.methods.addCard(randomId, answer.amount, ctx.web3.utils.keccak256(answer.secret)).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => 
+            {
+                cards.push({ id: randomId, secret: answer.secret, active: false, points: answer.amount});
+                common.setCards(cards); 
+                resolve();
+            }
+            , (err) => reject(err));
+        });
+    });
+       
 }
 
 //[SP2] Add vendor
@@ -48,11 +53,13 @@ async function _sp2() {
     let data = await ctx.prepaidCardManager.methods.isSigner(answer.vendor).call(ctx.transactionObject);
     console.log('isSigner:',data);
 
-    await ctx.prepaidCardManager.methods.addSigner(answer.vendor).send(ctx.transactionObject)
-        .then((tx) => {
-            console.log('Transaction sent.');
-            return web3Ctx.checkTransaction(tx.transactionHash);
+    return new Promise((resolve, reject) => {
+        ctx.prepaidCardManager.methods.addSigner(answer.vendor).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
         });
+    });
+    
 }
 
 //[SP3] Create Schema
@@ -86,11 +93,12 @@ async function _sp3() {
 
     const ctx = web3Ctx.getCurrentContext();
 
-    await ctx.schemas.methods.createSchema(schemaId,encodedData).send(ctx.transactionObject)
-    .then((tx) => {
-        console.log('Transaction sent.',tx.transactionHash);
-        return web3Ctx.checkTransaction(tx.transactionHash);
-    },(err)=> console.log(err));
+    return new Promise((resolve, reject) => {
+        ctx.schemas.methods.createSchema(schemaId,encodedData).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
 }
 
 async function _getClearHouseArray() {
@@ -169,10 +177,13 @@ async function _sp6() {
         operation = ctx.schemas.methods.invalidateSchema
     }
 
-    await operation(answer.schemaId).send(ctx.transactionObject).then((tx) => {
-        console.log('Transaction sent.',tx.transactionHash);
-        return web3Ctx.checkTransaction(tx.transactionHash);
-    },(err)=> console.log(err));
+    return new Promise((resolve, reject) => {
+        operation(answer.schemaId).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
+
 }
 
 //[SP7] Create Dapp
@@ -298,10 +309,14 @@ async function _updateContainer(json, address) {
         changes.push(pathValueDiff);
     }
     let encodedDataUpdate = RLP.encode(changes);
-    await jsonContainerInstance.methods.update(encodedDataUpdate).send(ctx.transactionObject).then((tx) => {
-        console.log('Transaction sent.',tx.transactionHash);
-        return web3Ctx.checkTransaction(tx.transactionHash);
-    },(err)=> console.log(err));
+
+    return new Promise((resolve, reject) => {
+        jsonContainerInstance.methods.update(encodedDataUpdate).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
+
 }
 
 //[SP10] dapps List
@@ -338,10 +353,14 @@ async function _sp11() {
   ];
 
   let answer = await inquirer.prompt(questions);
-  await ctx.inventory.methods.addDapp(answer.container.addr).send( ctx.transactionObject).then((tx) => {
-    console.log('Transaction sent.',tx.transactionHash);
-    return web3Ctx.checkTransaction(tx.transactionHash);
-    },(err)=> console.log(err));
+  return new Promise((resolve, reject) => {
+    ctx.inventory.methods.addDapp(answer.container.addr).send(ctx.transactionObject)
+    .on('transactionHash', (hash) => {
+        web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+    });
+  });
+
+
 }
 
 //[SP12] dapp delete common repo
@@ -358,10 +377,14 @@ async function _sp12() {
         { type: 'list', name: 'container', message: 'Choose a dapp', choices: choices }
     ];
     let answer = await inquirer.prompt(questions);
-    await ctx.inventory.methods.deleteDapp(answer.container.addr).send(ctx.transactionObject).then((tx) => {
-        console.log('Transaction sent.',tx.transactionHash);
-        return web3Ctx.checkTransaction(tx.transactionHash);
-        },(err)=> console.log(err));
+
+    return new Promise((resolve, reject) => {
+        ctx.inventory.methods.deleteDapp(answer.container.addr).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
+
 }
 
 //[SP13] dapp show QR

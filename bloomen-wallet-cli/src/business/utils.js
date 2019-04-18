@@ -128,6 +128,8 @@ async function _u4() {
                     console.log('Transaction sent.');
                     return web3Ctx.checkTransaction(tx.transactionHash);
                 });
+                
+
             } catch(err) {
                // nothing todo
             } 
