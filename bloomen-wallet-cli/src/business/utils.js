@@ -62,14 +62,14 @@ async function _ub3() {
     ];    
     let answer = await inquirer.prompt(questions);
     
-    await ctx.erc223.methods.mint(answer.address.address,parseInt(answer.amount)).send(ctx.transactionObject).then((tx) => {
-        console.log('Transaction sent.');
-        return web3Ctx.checkTransaction(tx.transactionHash);
-    },(err)=> console.log(err));       
+    return new Promise((resolve, reject) => {
+        ctx.erc223.methods.mint(answer.address.address,parseInt(answer.amount)).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
     
-        
 }
-
 
 //[U1] Test of device access to an asset
 async function _u1() { 
@@ -100,20 +100,31 @@ async function _u3() {
     for (i=0;i<cardNumber;i++){
         const secret = 'card://' + uuidv4();
         const randomId = getRandomId();
-        await ctx.prepaidCardManager.methods.addCard(randomId, amount,ctx.web3.utils.keccak256(secret)).send(ctx.transactionObject)
-        .then((tx) => {
-            console.log('Transaction sent.');
-            return web3Ctx.checkTransaction(tx.transactionHash);
-        });
-        await ctx.prepaidCardManager.methods.activateCard(randomId).send(ctx.transactionObject)
-        .then((tx) => {
-            console.log('Transaction sent.');
-            return web3Ctx.checkTransaction(tx.transactionHash);
-        });
+        await _addCard(ctx,randomId,amount,secret);
+        await _activateCard(ctx,randomId);
         cards.push({ id: randomId, secret: secret, active: true, points: amount});        
     }
     common.setCards(cards);    
 }
+
+function _addCard(ctx,randomId,amount,secret) {
+    return new Promise((resolve, reject) => {
+        ctx.prepaidCardManager.methods.addCard(randomId, amount,ctx.web3.utils.keccak256(secret)).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
+}
+
+function _activateCard(ctx,randomId) {
+    return new Promise((resolve, reject) => {
+        ctx.prepaidCardManager.methods.activateCard(randomId).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
+}
+
 
 //[U4] Re-activate all cards
 async function _u4() {
@@ -123,22 +134,12 @@ async function _u4() {
         let card=cards[i];
         if (card.active) {
             try {
-                await ctx.prepaidCardManager.methods.addCard(card.id, card.points, ctx.web3.utils.keccak256(card.secret)).send(ctx.transactionObject)
-                .then((tx) => {
-                    console.log('Transaction sent.');
-                    return web3Ctx.checkTransaction(tx.transactionHash);
-                });
-                
-
+                await _addCard(ctx,card.id, card.points,card.secret);        
             } catch(err) {
                // nothing todo
             } 
             try {
-                await ctx.prepaidCardManager.methods.activateCard(card.id).send(ctx.transactionObject)
-                .then((tx) => {
-                    console.log('Transaction sent.');
-                    return web3Ctx.checkTransaction(tx.transactionHash);
-                });
+                await _activateCard(ctx,card.id);
             } catch(err) {
                 // nothing todo
             }            

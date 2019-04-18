@@ -1,7 +1,5 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
-//const Businesscontract = require('../contracts/PrepaidCardManager.json');
-
 const Inventorycontract = require('../contracts/Bloomen.json');
 
 const DappsContract = require('../contracts/DappContainerFactory.json');
