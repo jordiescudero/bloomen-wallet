@@ -6,7 +6,7 @@ import "./token/ERC223ReceivingContract.sol";
 import "./token/ERC223.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO",2) {
+contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO",0) {
 
   using SafeMath for uint256;
     
