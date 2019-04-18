@@ -24,7 +24,7 @@ async function _sp1() {
     let answer = await inquirer.prompt(questions);
     let randomId = Math.floor(Math.random() * (Math.pow(2, 50) - 1)) + 1;
     
-    await  ctx.business.methods.addCard(randomId, answer.amount, ctx.web3.utils.keccak256(answer.secret)).send(ctx.transactionObject)
+    await  ctx.prepaidCardManager.methods.addCard(randomId, answer.amount, ctx.web3.utils.keccak256(answer.secret)).send(ctx.transactionObject)
         .then((tx) => {
             console.log('Transaction sent.');
             return web3Ctx.checkTransaction(tx.transactionHash);
@@ -45,10 +45,10 @@ async function _sp2() {
     let answer = await inquirer.prompt(questions);
     
     
-    let data = await ctx.business.methods.isSigner(answer.vendor).call(ctx.transactionObject);
+    let data = await ctx.prepaidCardManager.methods.isSigner(answer.vendor).call(ctx.transactionObject);
     console.log('isSigner:',data);
 
-    await ctx.business.methods.addSigner(answer.vendor).send(ctx.transactionObject)
+    await ctx.prepaidCardManager.methods.addSigner(answer.vendor).send(ctx.transactionObject)
         .then((tx) => {
             console.log('Transaction sent.');
             return web3Ctx.checkTransaction(tx.transactionHash);
@@ -86,7 +86,7 @@ async function _sp3() {
 
     const ctx = web3Ctx.getCurrentContext();
 
-    await ctx.business.methods.createSchema(schemaId,encodedData).send(ctx.transactionObject)
+    await ctx.schemas.methods.createSchema(schemaId,encodedData).send(ctx.transactionObject)
     .then((tx) => {
         console.log('Transaction sent.',tx.transactionHash);
         return web3Ctx.checkTransaction(tx.transactionHash);
@@ -129,7 +129,7 @@ async function _sp4() {
   
     const ctx = web3Ctx.getCurrentContext();
     try {
-        let schemas = await ctx.business.methods.getSchemas().call(ctx.transactionObject);
+        let schemas = await ctx.schemas.methods.getSchemas().call(ctx.transactionObject);
         console.log('Schemas:',schemas);
     } catch(e) {
         console.log('Error:',e);
@@ -146,7 +146,7 @@ async function _sp5() {
 
     const ctx = web3Ctx.getCurrentContext();
     try {
-        let schema = await ctx.business.methods.getSchema(answer.schemaId).call(ctx.transactionObject);
+        let schema = await ctx.schemas.methods.getSchema(answer.schemaId).call(ctx.transactionObject);
         console.log('Schema:',schema);
     } catch(e) {
         console.log('Error:',e);
@@ -163,10 +163,10 @@ async function _sp6() {
 
     const ctx = web3Ctx.getCurrentContext();
 
-    let operation = ctx.business.methods.validateSchema;
+    let operation = ctx.schemas.methods.validateSchema;
     
     if (answer.status == 'disabled') {
-        operation = ctx.business.methods.invalidateSchema
+        operation = ctx.schemas.methods.invalidateSchema
     }
 
     await operation(answer.schemaId).send(ctx.transactionObject).then((tx) => {

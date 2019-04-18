@@ -20,7 +20,7 @@ async function _v1() {
     ];
     console.log('Activate prepaid card');
     let answer = await inquirer.prompt(questions);
-    await ctx.business.methods.activateCard(answer.id).send(ctx.transactionObject)
+    await ctx.prepaidCardManager.methods.activateCard(answer.id).send(ctx.transactionObject)
         .then((tx) => {
             console.log('Transaction sent.');
             return web3Ctx.checkTransaction(tx.transactionHash);

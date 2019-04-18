@@ -1,9 +1,10 @@
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
+import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./Assets.sol";
 
-contract Devices  is Assets {
+contract Devices is Ownable {
 
   struct UserDevices {   
     mapping (bytes32 => Device) devices;
@@ -23,6 +24,12 @@ contract Devices  is Assets {
   mapping (address => UserDevices) private userDevices_;
 
   mapping (bytes32 => address) private deviceHashes_;
+ 
+  Assets private _assets;
+  
+  constructor (address _assetsAddr) public{
+    _assets = Assets(_assetsAddr);    
+  }
     
   function isAllowed(bytes32 _deviceHash) public view returns (bool) {
     bool allowed = userDevices_[deviceHashes_[_deviceHash]].devices[_deviceHash].expirationDate > now ;
@@ -35,6 +42,7 @@ contract Devices  is Assets {
   }
    
   function getDevicesPageCount() public view returns (uint256) {
+    // TODO: si el length es 0 hay 0 paginas si no +1
     return userDevices_[msg.sender].deviceArray.length / PAGE_SIZE;
   }
 
@@ -83,7 +91,7 @@ contract Devices  is Assets {
     
   function _handshake(address _owner, bytes32 _deviceHash, uint256 _assetId, uint256 _schemaId, uint256 _lifeTime, string memory _dappId, string memory _description) internal {
 
-    require(Assets._checkOwnership(_owner, _assetId, _schemaId),"not allowed");
+    require(_assets.checkOwnershipForAddress(_owner, _assetId, _schemaId),"not allowed");
 
     if ((deviceHashes_[_deviceHash] != address(0)) && (!isAllowed(_deviceHash))) {
       _removeDevice(deviceHashes_[_deviceHash], _deviceHash);

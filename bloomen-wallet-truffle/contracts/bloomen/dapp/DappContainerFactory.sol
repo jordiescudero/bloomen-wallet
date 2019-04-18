@@ -1,21 +1,22 @@
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
-import "./lib/Structs.sol";
-import "./JsonContainer.sol";
-import "../../node_modules/solidity-rlp/contracts/RLPReader.sol";
+import "./DappContainer.sol";
+import "../../../node_modules/solidity-rlp/contracts/RLPReader.sol";
+import "../../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-
-contract JsonContainerFactory is Structs {
+contract DappContainerFactory is Ownable {
 
   using RLPReader for bytes;
   using RLPReader for uint;
   using RLPReader for RLPReader.RLPItem;
 
-
+  struct Container {
+    address addr;
+    string name;
+  }
 
   Container[] private containers_;
-
 
   address private _owner;
 
@@ -37,9 +38,9 @@ contract JsonContainerFactory is Structs {
     RLPReader.RLPItem[] memory itemList = item.toList();
 
     uint listLength = itemList.length;
-    PathValue[] memory data = new PathValue[](listLength);
+    DappContainer.PathValue[] memory data = new DappContainer.PathValue[](listLength);
     for (uint i = 0; i < listLength; i++) {
-      PathValue memory pathValue = PathValue(
+      DappContainer.PathValue memory pathValue = DappContainer.PathValue(
         string(itemList[i].toList()[0].toBytes()),
         string(itemList[i].toList()[1].toBytes()),
         string(itemList[i].toList()[2].toBytes())
@@ -47,7 +48,7 @@ contract JsonContainerFactory is Structs {
       data[i] = pathValue;
     } 
 
-    JsonContainer container = new JsonContainer();
+    DappContainer container = new DappContainer();
     container.initialize(data);
     containers_.push(Container(address(container), _name));
     
@@ -57,5 +58,4 @@ contract JsonContainerFactory is Structs {
     return containers_;
   }
 
-    
 }

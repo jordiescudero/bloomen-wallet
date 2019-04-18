@@ -19,7 +19,7 @@ async function _ub1() {
     }
     for (i=0;i<address.length;i++){
         try{
-            let balance = await ctx.business.methods.balanceOf(address[i].address).call(ctx.transactionObject)
+            let balance = await ctx.erc223.methods.balanceOf(address[i].address).call(ctx.transactionObject)
             console.log(address[i].name, address[i].address,' balance:',balance);
         } catch(e){
             console.log('Error:',e);
@@ -35,7 +35,7 @@ async function _ub2() {
     ];    
     let answer = await inquirer.prompt(questions);
     try{
-        let response =  await ctx.business.methods.balanceOf(answer.address).call(ctx.transactionObject);       
+        let response =  await ctx.erc223.methods.balanceOf(answer.address).call(ctx.transactionObject);       
         console.log('Balance for '+ answer.address + ' :' + response);
     } catch(e){
         console.log('Error:',e);
@@ -62,7 +62,7 @@ async function _ub3() {
     ];    
     let answer = await inquirer.prompt(questions);
     
-    await ctx.business.methods.mint(answer.address.address,parseInt(answer.amount)).send(ctx.transactionObject).then((tx) => {
+    await ctx.erc223.methods.mint(answer.address.address,parseInt(answer.amount)).send(ctx.transactionObject).then((tx) => {
         console.log('Transaction sent.');
         return web3Ctx.checkTransaction(tx.transactionHash);
     },(err)=> console.log(err));       
@@ -79,7 +79,7 @@ async function _u1() {
     ];
     let answer = await inquirer.prompt(questions);
     try{
-        let response = await ctx.business.methods.isAllowed(ctx.web3.utils.keccak256(answer.device)).call(ctx.transactionObject);
+        let response = await ctx.devices.methods.isAllowed(ctx.web3.utils.keccak256(answer.device)).call(ctx.transactionObject);
         console.log( answer.device +'  access: ' +response);
     } catch(e){
         console.log('Error:',e);
@@ -100,12 +100,12 @@ async function _u3() {
     for (i=0;i<cardNumber;i++){
         const secret = 'card://' + uuidv4();
         const randomId = getRandomId();
-        await ctx.business.methods.addCard(randomId, amount,ctx.web3.utils.keccak256(secret)).send(ctx.transactionObject)
+        await ctx.prepaidCardManager.methods.addCard(randomId, amount,ctx.web3.utils.keccak256(secret)).send(ctx.transactionObject)
         .then((tx) => {
             console.log('Transaction sent.');
             return web3Ctx.checkTransaction(tx.transactionHash);
         });
-        await ctx.business.methods.activateCard(randomId).send(ctx.transactionObject)
+        await ctx.prepaidCardManager.methods.activateCard(randomId).send(ctx.transactionObject)
         .then((tx) => {
             console.log('Transaction sent.');
             return web3Ctx.checkTransaction(tx.transactionHash);
@@ -123,7 +123,7 @@ async function _u4() {
         let card=cards[i];
         if (card.active) {
             try {
-                await ctx.business.methods.addCard(card.id, card.points, ctx.web3.utils.keccak256(card.secret)).send(ctx.transactionObject)
+                await ctx.prepaidCardManager.methods.addCard(card.id, card.points, ctx.web3.utils.keccak256(card.secret)).send(ctx.transactionObject)
                 .then((tx) => {
                     console.log('Transaction sent.');
                     return web3Ctx.checkTransaction(tx.transactionHash);
@@ -132,7 +132,7 @@ async function _u4() {
                // nothing todo
             } 
             try {
-                await ctx.business.methods.activateCard(card.id).send(ctx.transactionObject)
+                await ctx.prepaidCardManager.methods.activateCard(card.id).send(ctx.transactionObject)
                 .then((tx) => {
                     console.log('Transaction sent.');
                     return web3Ctx.checkTransaction(tx.transactionHash);

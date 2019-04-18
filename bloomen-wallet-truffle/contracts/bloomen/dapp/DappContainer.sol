@@ -2,16 +2,21 @@ pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "./lib/Strings.sol";
-import "./lib/Structs.sol";
-import "../../node_modules/solidity-rlp/contracts/RLPReader.sol";
+import "../../../node_modules/solidity-rlp/contracts/RLPReader.sol";
+import "../../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-
-contract JsonContainer is Structs {
+contract DappContainer is Ownable {
 
   using Strings for *;
   using RLPReader for bytes;
   using RLPReader for uint;
   using RLPReader for RLPReader.RLPItem;
+
+  struct PathValue {
+        string path;
+        string value;
+        string valueType;
+  }
 
   mapping (bytes32 => uint[]) private hashIndexMap_;
 

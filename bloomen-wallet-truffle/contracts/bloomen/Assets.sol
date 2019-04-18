@@ -5,8 +5,9 @@ import "./Schemas.sol";
 import "./token/ERC223ReceivingContract.sol";
 import "./token/ERC223.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO",0) {
+contract  Assets is ERC223ReceivingContract, Ownable{
 
   using SafeMath for uint256;
     
@@ -24,9 +25,15 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
 
   uint256 constant private PAGE_SIZE = 10;
 
-  // buy://<assetId>#<schemaId>#<amount>#<dappId>#amount
+  mapping (address => UserAssets) private userAssets_; 
 
-  mapping (address => UserAssets) private userAssets_;
+  Schemas private _schemas;
+  ERC223 private _erc223;
+  
+  constructor (address _schemasAddr, address _erc223Addr) public{
+    _erc223 = ERC223(_erc223Addr);
+    _schemas = Schemas(_schemasAddr);
+  }
 
   function checkOwnership(uint256 _assetId, uint256 _schemaId) public view returns (bool) {
     return _checkOwnership(msg.sender, _assetId, _schemaId);  
@@ -45,6 +52,7 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
   }
 
   function getAssetsPageCount() public view returns (uint256) {
+    // TODO: si el length es 0 hay 0 paginas si no +1
     return userAssets_[msg.sender].assets.length / PAGE_SIZE;
   }
 
@@ -72,13 +80,13 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
   }
 
   function _buy(address _user, uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId, string memory _description) internal  {
-    Schema memory schema = Schemas.getSchema(_schemaId);
+    Schemas.Schema memory schema = _schemas.getSchema(_schemaId);
     require(schema.amount == _amount, "incorrect amount");    
     require(!_checkOwnership(_user, _assetId, _schemaId), "duplicated");
 
     if (_amount >0 ){
       // avoid money transfer on free assets
-      ERC223.transfer(address(this), _amount, _schemaId);
+      _erc223.transfer(address(this), _amount, _schemaId);
     }
   
     // registrar la compra
@@ -99,16 +107,16 @@ contract  Assets is Schemas, ERC223ReceivingContract, ERC223("BloomenCoin","BLO"
   }
 
   function tokenFallback(address _from, uint _value, uint256 _schemaId) public {
-    Schema memory schema = Schemas.getSchema(_schemaId);
+    Schemas.Schema memory schema = _schemas.getSchema(_schemaId);
     uint pieValue = _value;
 
     for (uint i = 0; i < schema.clearingHouseRules.length-1; i++) {
       uint tmpValue = calculatePercentage(_value,schema.clearingHouseRules[i].percent);
-      ERC223.transfer(schema.clearingHouseRules[i].receptor, tmpValue, 0);
+      _erc223.transfer(schema.clearingHouseRules[i].receptor, tmpValue, 0);
       pieValue -= tmpValue;
     }
 
-    ERC223.transfer(schema.clearingHouseRules[schema.clearingHouseRules.length-1].receptor, pieValue, 0);
+    _erc223.transfer(schema.clearingHouseRules[schema.clearingHouseRules.length-1].receptor, pieValue, 0);
 
   }
 

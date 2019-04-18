@@ -4,7 +4,7 @@ pragma experimental ABIEncoderV2;
 import "../../node_modules/solidity-rlp/contracts/RLPReader.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract  Schemas is Ownable {
+contract Schemas is Ownable {
 
   using RLPReader for bytes;
   using RLPReader for uint;

@@ -6,7 +6,6 @@ contract Bloomen is Ownable{
 
   address[] private _dapps;
 
-
   function addDapp(address _dappAddress) onlyOwner public {
     _dapps.push(_dappAddress);
   }
@@ -25,7 +24,5 @@ contract Bloomen is Ownable{
   function getDapps() view public returns(address[] memory) {
     return _dapps;
   }
-
-
 
 }

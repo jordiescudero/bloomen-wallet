@@ -1,17 +1,27 @@
 const HDWalletProvider = require("truffle-hdwallet-provider");
 
-const Businesscontract = require('../contracts/PrepaidCardManager.json');
+//const Businesscontract = require('../contracts/PrepaidCardManager.json');
 
 const Inventorycontract = require('../contracts/Bloomen.json');
 
-const DappsContract = require('../contracts/JsonContainerFactory.json');
+const DappsContract = require('../contracts/DappContainerFactory.json');
 
-const ContainerContrant = require('../contracts/JsonContainer.json');
+const ContainerContract = require('../contracts/DappContainer.json');
 
+const MovementHistoryContract = require('../contracts/MovementHistory.json');
+
+const ERC223Contract = require('../contracts/ERC223.json');
+
+const PrepaidCardManager = require('../contracts/PrepaidCardManager.json');
+
+const Schemas = require('../contracts/Schemas.json');
+
+const Devices = require('../contracts/Devices.json');
+
+const Assets = require('../contracts/Assets.json');
 
 const GAS = 9999999;
 const Web3 = require('web3');
-
 
 function _contextSetup(type, mnemonic) {
     const _context = {type:type, mnemonic:mnemonic};
@@ -26,15 +36,21 @@ function _contextSetup(type, mnemonic) {
             gasPrice: 0
         };
 
-    _context.business = new _context.web3.eth.Contract(Businesscontract.abi, Businesscontract.networks[process.env.ALASTRIA_NETWORKID].address);
+    //_context.business = new _context.web3.eth.Contract(Businesscontract.abi, Businesscontract.networks[process.env.ALASTRIA_NETWORKID].address);
+
+    _context.movements = new _context.web3.eth.Contract(MovementHistoryContract.abi, MovementHistoryContract.networks[process.env.ALASTRIA_NETWORKID].address);
+    _context.erc223 = new _context.web3.eth.Contract(ERC223Contract.abi, ERC223Contract.networks[process.env.ALASTRIA_NETWORKID].address);
+    _context.prepaidCardManager = new _context.web3.eth.Contract(PrepaidCardManager.abi, PrepaidCardManager.networks[process.env.ALASTRIA_NETWORKID].address);
+    _context.schemas = new _context.web3.eth.Contract(Schemas.abi, Schemas.networks[process.env.ALASTRIA_NETWORKID].address);
+    _context.devices= new _context.web3.eth.Contract(Devices.abi, Devices.networks[process.env.ALASTRIA_NETWORKID].address);
+    _context.assets = new _context.web3.eth.Contract(Assets.abi, Assets.networks[process.env.ALASTRIA_NETWORKID].address);
+
     _context.inventory = new _context.web3.eth.Contract(Inventorycontract.abi, Inventorycontract.networks[process.env.ALASTRIA_NETWORKID].address);
     _context.dapps = new _context.web3.eth.Contract(DappsContract.abi, DappsContract.networks[process.env.ALASTRIA_NETWORKID].address);
-    _context.containerABI = ContainerContrant.abi;
+    _context.containerABI = ContainerContract.abi;
 
     return _context;
 }
-
-
 
 const _contexts = {
     ADMIN:  _contextSetup('admin', process.env.ADMIN_MNEMONIC),
