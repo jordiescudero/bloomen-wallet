@@ -92,27 +92,28 @@ function _getCurrentContext(){
 
 function _checkTransaction(tx) {
     return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            _currentContext.web3.eth.getTransactionReceipt(tx,
-                function (err, status) {
-                    if (err) {
-                        console.log('KO',err);
-                        reject(err);
-                    } else if (!status) {
-                        console.log('Checking transaction ...');
-                        _checkTransaction(tx);
-                    }
-                    else if (GAS == status.gasUsed) {                        
-                        console.log('Error','Transaction error.');
-                        reject();
-                    } else {
-                        console.log('Transaction mined.');
-                        resolve();
-                    }
-                }
-            );
-        }, 1000);
+        setTimeout(() => _tick(tx,resolve,reject), 1000);
     });
+}
+function _tick(tx,resolve,reject) {
+    _currentContext.web3.eth.getTransactionReceipt(tx,
+         (err, status) => {
+            if (err) {
+                console.log('KO',err);
+                reject(err);
+            } else if (!status) {
+                console.log('Checking transaction ...');
+                setTimeout(()=>_tick(tx,resolve,reject), 1000);
+            }
+            else if (GAS == status.gasUsed) {                        
+                console.log('Error','Transaction error.');
+                reject();
+            } else {
+                console.log('Transaction mined.');
+                resolve();
+            }
+        }
+    );
 }
 
 module.exports = {

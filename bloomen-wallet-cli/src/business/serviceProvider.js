@@ -189,7 +189,7 @@ async function _sp7() {
     console.log(answer.name + ' container created.');
 }
 
-async function _createContainer(json, name) {
+function _createContainer(json, name) {
     const ctx = web3Ctx.getCurrentContext();
     let jsonPathPairs = jsonPath.marshall(json, "", []);
     let pathValues = [];
@@ -201,10 +201,14 @@ async function _createContainer(json, name) {
         pathValues.push(pathValue);
     }
     let encodedData = RLP.encode(pathValues);
-    await ctx.dapps.methods.createContainer(encodedData, name).send(ctx.transactionObject).then((tx) => {
-        console.log('Transaction sent.',tx.transactionHash);
-        return web3Ctx.checkTransaction(tx.transactionHash);
-    },(err)=> console.log(err));
+    
+    return new Promise((resolve, reject) => {
+        ctx.dapps.methods.createContainer(encodedData, name).send(ctx.transactionObject)
+        .on('transactionHash', (hash) => {
+            web3Ctx.checkTransaction(hash).then( () => resolve(), (err) => reject(err));
+        });
+    });
+   
 }
 
 //[SP8] Show Dapp
