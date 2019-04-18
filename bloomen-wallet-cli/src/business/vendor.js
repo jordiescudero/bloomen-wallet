@@ -20,10 +20,10 @@ async function _v1() {
     ];
     console.log('Activate prepaid card');
     let answer = await inquirer.prompt(questions);
-    await _activateCard(answer.id); 
+    await _activateCard(ctx,cards,answer.id); 
 }
 
-function _activateCard(_id){
+function _activateCard(ctx,cards,_id){
     return new Promise((resolve, reject) => {
         ctx.prepaidCardManager.methods.activateCard(_id).send(ctx.transactionObject)
         .on('transactionHash', (hash) => {

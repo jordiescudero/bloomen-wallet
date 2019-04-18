@@ -103,10 +103,10 @@ function _tick(tx,resolve,reject) {
                 console.log('Checking transaction ...');
                 setTimeout(()=>_tick(tx,resolve,reject), 1000);
             }
-            else if (GAS == status.gasUsed) {                        
+            else if ( !status.status) {                        
                 console.log('Error','Transaction error.');
                 reject();
-            } else {
+            } else if ( status.status){
                 console.log('Transaction mined.');
                 resolve();
             }
