@@ -2,9 +2,9 @@ pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
 import "../../node_modules/solidity-rlp/contracts/RLPReader.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../../node_modules/openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 
-contract Schemas is Ownable {
+contract Schemas is WhitelistedRole {
 
   using RLPReader for bytes;
   using RLPReader for uint;
@@ -37,15 +37,15 @@ contract Schemas is Ownable {
     return (schemasArray_);
   }
 
-  function createSchema(uint256 _schemaId, bytes memory _data) public onlyOwner  {
+  function createSchema(uint256 _schemaId, bytes memory _data) public onlyWhitelisted  {
     _createSchema(_schemaId, _data);  
   }
 
-  function invalidateSchema(uint256 _schemaId) public  onlyOwner {
+  function invalidateSchema(uint256 _schemaId) public  onlyWhitelisted {
     _schemaStatus(_schemaId, false);  
   }
 
-  function validateSchema(uint256 _schemaId) public onlyOwner  {
+  function validateSchema(uint256 _schemaId) public onlyWhitelisted  {
     _schemaStatus(_schemaId, true);  
   }
 

@@ -3,9 +3,9 @@ pragma experimental ABIEncoderV2;
 
 import "./lib/Strings.sol";
 import "../../../node_modules/solidity-rlp/contracts/RLPReader.sol";
-import "../../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../../../node_modules/openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 
-contract DappContainer is Ownable {
+contract DappContainer is WhitelistedRole {
 
   using Strings for *;
   using RLPReader for bytes;
@@ -22,26 +22,11 @@ contract DappContainer is Ownable {
 
   PathValue[] private data_;
 
-  address private _owner;
-
-  constructor() public {
-    _owner = tx.origin;
-  }
-
-  modifier onlyOwner() {
-    require(isOwner());
-    _;
-  }
-
-  function isOwner() public view returns(bool) {
-    return tx.origin == _owner;
-  }
-
   function getData() public view returns (PathValue[] memory) {
     return data_;
   }
 
-  function update(bytes memory _in) onlyOwner public {
+  function update(bytes memory _in) onlyWhitelisted public {
     RLPReader.RLPItem memory item = _in.toRlpItem();
     RLPReader.RLPItem[] memory itemList = item.toList();
     uint listLength = itemList.length;
@@ -57,7 +42,7 @@ contract DappContainer is Ownable {
     }
   }
 
-  function initialize(PathValue[] memory _data) onlyOwner  public {
+  function initialize(PathValue[] memory _data) onlyWhitelisted  public {
     uint dataLength = _data.length;
     for (uint i = 0;i < dataLength; i++) {
       PathValue memory pathValue = _data[i];

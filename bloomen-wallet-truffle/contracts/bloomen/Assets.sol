@@ -4,12 +4,15 @@ pragma experimental ABIEncoderV2;
 import "./Schemas.sol";
 import "./token/ERC223ReceivingContract.sol";
 import "./token/ERC223.sol";
+import "../../node_modules/solidity-rlp/contracts/RLPReader.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-contract  Assets is ERC223ReceivingContract, Ownable{
+contract  Assets is ERC223ReceivingContract{
 
   using SafeMath for uint256;
+  using RLPReader for bytes;
+  using RLPReader for uint;
+  using RLPReader for RLPReader.RLPItem;
     
   struct UserAssets {   
     Asset[] assets;
@@ -43,17 +46,12 @@ contract  Assets is ERC223ReceivingContract, Ownable{
     return _checkOwnership(_target, _assetId, _schemaId);  
   }
 
-  function buy(uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId) public  {
-    _buy(msg.sender, _assetId, _schemaId, _amount, _dappId, "");  
-  }
-
-  function buy(uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId, string memory _description) public  {
-    _buy(msg.sender, _assetId, _schemaId, _amount, _dappId, _description);  
-  }
-
-  function getAssetsPageCount() public view returns (uint256) {
-    // TODO: si el length es 0 hay 0 paginas si no +1
-    return userAssets_[msg.sender].assets.length / PAGE_SIZE;
+  function getAssetsPageCount() public view returns (uint256) {    
+    uint256 pages = userAssets_[msg.sender].assets.length / PAGE_SIZE;
+    if ((userAssets_[msg.sender].assets.length % PAGE_SIZE)>0) {
+      pages++;
+    }
+    return pages;
   }
 
   function getAssets(uint256 _page) public view returns (Asset[] memory) {
@@ -79,16 +77,30 @@ contract  Assets is ERC223ReceivingContract, Ownable{
     return (assetsPage);
   }
 
-  function _buy(address _user, uint256 _assetId, uint256 _schemaId, uint256 _amount, string memory _dappId, string memory _description) internal  {
+  function tokenFallback(address _user, uint _amount, bytes memory _data) public {
+
+    RLPReader.RLPItem memory item = _data.toRlpItem();
+    RLPReader.RLPItem[] memory itemList = item.toList();
+
+    uint256 _assetId = uint256(itemList[0].toUint());
+    uint256 _schemaId = uint256(itemList[1].toUint());
+
+    string memory _dappId = string(itemList[2].toBytes());
+    string memory _description = string(itemList[3].toBytes());
+
     Schemas.Schema memory schema = _schemas.getSchema(_schemaId);
     require(schema.amount == _amount, "incorrect amount");    
     require(!_checkOwnership(_user, _assetId, _schemaId), "duplicated");
+    
+    uint pieValue = _amount;
 
-    if (_amount >0 ){
-      // avoid money transfer on free assets
-      _erc223.transfer(address(this), _amount, _schemaId);
+    for (uint i = 0; i < schema.clearingHouseRules.length-1; i++) {
+      uint tmpValue = calculatePercentage(_amount,schema.clearingHouseRules[i].percent);
+      _erc223.transfer(schema.clearingHouseRules[i].receptor, tmpValue);
+      pieValue -= tmpValue;
     }
-  
+
+    _erc223.transfer(schema.clearingHouseRules[schema.clearingHouseRules.length-1].receptor, pieValue);
     // registrar la compra
     userAssets_[_user].assets.push(Asset(now + schema.assetLifeTime , _assetId, _schemaId, _dappId, _description));
   }
@@ -104,20 +116,6 @@ contract  Assets is ERC223ReceivingContract, Ownable{
     }
     
     return false;
-  }
-
-  function tokenFallback(address _from, uint _value, uint256 _schemaId) public {
-    Schemas.Schema memory schema = _schemas.getSchema(_schemaId);
-    uint pieValue = _value;
-
-    for (uint i = 0; i < schema.clearingHouseRules.length-1; i++) {
-      uint tmpValue = calculatePercentage(_value,schema.clearingHouseRules[i].percent);
-      _erc223.transfer(schema.clearingHouseRules[i].receptor, tmpValue, 0);
-      pieValue -= tmpValue;
-    }
-
-    _erc223.transfer(schema.clearingHouseRules[schema.clearingHouseRules.length-1].receptor, pieValue, 0);
-
   }
 
   function calculatePercentage(uint theNumber, uint percentage) public view returns (uint) {

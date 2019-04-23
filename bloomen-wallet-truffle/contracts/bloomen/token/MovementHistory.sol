@@ -1,7 +1,9 @@
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
-contract MovementHistory {
+import "../../../node_modules/openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
+
+contract MovementHistory is WhitelistedRole {
 
     struct Movement {
         int256 amount;
@@ -18,12 +20,8 @@ contract MovementHistory {
     int256 constant private PAGE_SIZE = 10;
     int256 constant private MAX_PAGE_NUMBER = MAX/PAGE_SIZE;
 
-    function addMovement(int256 _amount, string memory _description,  address _to) public {
-        _addMovement(_amount, _description, msg.sender, _to);
-    }
 
-    // TODO: Proteger el _addMovement solo para el ERC223 Role o algo asi
-    function addMovement(int256 _amount, string memory _description, address _from, address _to) public {
+    function addMovement(int256 _amount, string memory _description, address _from, address _to) onlyWhitelisted public {
         _addMovement(_amount, _description, _from, _to);
     }
     

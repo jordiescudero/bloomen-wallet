@@ -3,11 +3,11 @@ pragma experimental ABIEncoderV2;
 
 import "../../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "../../node_modules/openzeppelin-solidity/contracts/access/roles/SignerRole.sol";
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../../node_modules/openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 import "./Devices.sol";
 import "./token/ERC223.sol";
 
-contract PrepaidCardManager is SignerRole, Ownable {
+contract PrepaidCardManager is SignerRole, WhitelistedRole {
   using SafeMath for uint256;
 
   event CardValidated(
@@ -43,7 +43,7 @@ contract PrepaidCardManager is SignerRole, Ownable {
     return (cards_[_cardId].cardId, cards_[_cardId].owner, cards_[_cardId].tokens, cards_[_cardId].active);
   }
 
-  function addCard(uint256 _cardId, uint256 _tokens, bytes32 _hash) onlyOwner public {
+  function addCard(uint256 _cardId, uint256 _tokens, bytes32 _hash) onlyWhitelisted public {
     require(_tokens > 0, "empty_tokens");
     require(_cardId > 0, "no_valid_card_id");
     require(cards_[_cardId].initialized == 0, "card_exist");
@@ -67,8 +67,6 @@ contract PrepaidCardManager is SignerRole, Ownable {
     require(cards_[cardId].active == true, "not_active");
     require(cards_[cardId].hash ==  hash, "wrong_secret");
   
-    // TODO :sender vs origin
-    //_erc223.transfer(address(this), msg.sender,cards_[cardId].tokens);
     _erc223.transfer( msg.sender,cards_[cardId].tokens);
 
     emit CardValidated(cards_[cardId].owner, cards_[cardId].cardId, msg.sender);

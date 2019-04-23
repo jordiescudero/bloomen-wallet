@@ -26,33 +26,6 @@
         "login": {
           "title": "Antenna instance"
         }
-      },
-      "es":{
-        "home": {
-          "title": "Antenna",
-          "subtitle": "Cyprus"
-        },
-        "login": {
-          "title": "Antenna instance"
-        }
-      },
-      "de":{
-        "home": {
-          "title": "Antenna",
-          "subtitle": "Cyprus"
-        },
-        "login": {
-          "title": "Antenna instance"
-        }
-      },
-      "ca":{
-        "home": {
-          "title": "Antenna",
-          "subtitle": "Cyprus"
-        },
-        "login": {
-          "title": "Antenna instance"
-        }
       }
     },
     "news": [
@@ -67,18 +40,6 @@
           "el":{
             "title": "EL-News #2",
             "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue velit mi, vitae sodales ligula fermentum ut. Donec vel ornare nibh. Duis scelerisque suscipit arcu, sit amet malesuada orci feugiat s" 
-          },
-          "es":{
-            "title": "ES-News #2",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue velit mi, vitae sodales ligula fermentum ut. Donec vel ornare nibh. Duis scelerisque suscipit arcu, sit amet malesuada orci feugiat sit amet. Vestibulum at efficitur arcu, et tincidunt nunc. Maecenas non ornare lacus, ac egestas magna. In eu mattis neque, at consectetur nunc."
-          },
-          "de":{
-            "title": "DE-News #2",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue velit mi, vitae sodales ligula fermentum ut. Donec vel ornare nibh. Duis scelerisque suscipit arcu, sit amet malesuada orci feugiat sit amet. Vestibulum at efficitur arcu, et tincidunt nunc. Maecenas non ornare lacus, ac egestas magna. In eu mattis neque, at consectetur nunc."
-          },
-          "ca":{
-            "title": "CA-News #2",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed congue velit mi, vitae sodales ligula fermentum ut. Donec vel ornare nibh. Duis scelerisque suscipit arcu, sit amet malesuada orci feugiat sit amet. Vestibulum at efficitur arcu, et tincidunt nunc. Maecenas non ornare lacus, ac egestas magna. In eu mattis neque, at consectetur nunc."
           }
         },
         "payment" : {

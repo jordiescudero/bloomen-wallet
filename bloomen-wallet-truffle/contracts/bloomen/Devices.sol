@@ -1,10 +1,9 @@
 pragma solidity ^0.5.2;
 pragma experimental ABIEncoderV2;
 
-import "../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./Assets.sol";
 
-contract Devices is Ownable {
+contract Devices {
 
   struct UserDevices {   
     mapping (bytes32 => Device) devices;
@@ -40,10 +39,13 @@ contract Devices is Ownable {
     bool allowed =  (deviceHashes_[_deviceHash] == _target) && (isAllowed(_deviceHash));
     return allowed;
   }
-   
-  function getDevicesPageCount() public view returns (uint256) {
-    // TODO: si el length es 0 hay 0 paginas si no +1
-    return userDevices_[msg.sender].deviceArray.length / PAGE_SIZE;
+
+  function getAssetsPageCount() public view returns (uint256) {    
+    uint256 pages = userDevices_[msg.sender].deviceArray.length / PAGE_SIZE;
+    if ( (userDevices_[msg.sender].deviceArray.length % PAGE_SIZE)>0) {
+      pages++;
+    }
+    return pages;
   }
 
   function getDevices(uint256 _page) public view returns (Device[] memory) {

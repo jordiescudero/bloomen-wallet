@@ -3,9 +3,9 @@ pragma experimental ABIEncoderV2;
 
 import "./DappContainer.sol";
 import "../../../node_modules/solidity-rlp/contracts/RLPReader.sol";
-import "../../../node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "../../../node_modules/openzeppelin-solidity/contracts/access/roles/WhitelistedRole.sol";
 
-contract DappContainerFactory is Ownable {
+contract DappContainerFactory is WhitelistedRole {
 
   using RLPReader for bytes;
   using RLPReader for uint;
@@ -18,22 +18,7 @@ contract DappContainerFactory is Ownable {
 
   Container[] private containers_;
 
-  address private _owner;
-
-  constructor() public {
-    _owner = tx.origin;
-  }
-
-  modifier onlyOwner() {
-    require(isOwner());
-    _;
-  }
-
-  function isOwner() public view returns(bool) {
-    return tx.origin == _owner;
-  }
-
-  function createContainer(bytes memory _in, string memory _name) onlyOwner public {
+  function createContainer(bytes memory _in, string memory _name) onlyWhitelistAdmin public {
     RLPReader.RLPItem memory item = _in.toRlpItem();
     RLPReader.RLPItem[] memory itemList = item.toList();
 
@@ -50,8 +35,9 @@ contract DappContainerFactory is Ownable {
 
     DappContainer container = new DappContainer();
     container.initialize(data);
-    containers_.push(Container(address(container), _name));
-    
+    container.addWhitelistAdmin(msg.sender);
+
+    containers_.push(Container(address(container), _name)); 
   }
 
   function getContainers() public view returns (Container[] memory) {

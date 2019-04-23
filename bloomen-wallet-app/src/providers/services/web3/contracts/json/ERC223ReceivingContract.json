@@ -14,7 +14,7 @@
         },
         {
           "name": "_data",
-          "type": "uint256"
+          "type": "bytes"
         }
       ],
       "name": "tokenFallback",
@@ -24,25 +24,25 @@
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.5.7+commit.6da8b019\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_data\",\"type\":\"uint256\"}],\"name\":\"tokenFallback\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol\":\"ERC223ReceivingContract\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol\":{\"keccak256\":\"0x858e34c11f744eb33192d41cce3f43dc1c4f4e4f8e2ff9273b7239fe1fd62e7e\",\"urls\":[\"bzzr://76acf0f63a80db66bb85e91101b6be3458e47ecf5665b0e87432d330621e8ed3\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.5.7+commit.6da8b019\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"constant\":false,\"inputs\":[{\"name\":\"_from\",\"type\":\"address\"},{\"name\":\"_value\",\"type\":\"uint256\"},{\"name\":\"_data\",\"type\":\"bytes\"}],\"name\":\"tokenFallback\",\"outputs\":[],\"payable\":false,\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol\":\"ERC223ReceivingContract\"},\"evmVersion\":\"byzantium\",\"libraries\":{},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol\":{\"keccak256\":\"0x56e766892804f98ab6eca092a5999a229b25aa38e251301928f426405e920a2f\",\"urls\":[\"bzzr://3d05b9014352139d28066d00875022d9d38e8c643cd85485a2a4f1baf428a811\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.5.2;\n\ncontract ERC223ReceivingContract { \n  function tokenFallback(address _from, uint _value, uint256 _data) public;\n}",
+  "source": "pragma solidity ^0.5.2;\n\ncontract ERC223ReceivingContract { \n  function tokenFallback(address _from, uint _value, bytes memory _data) public;\n}",
   "sourcePath": "/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol",
   "ast": {
     "absolutePath": "/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol",
     "exportedSymbols": {
       "ERC223ReceivingContract": [
-        4325
+        4286
       ]
     },
-    "id": 4326,
+    "id": 4287,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4315,
+        "id": 4276,
         "literals": [
           "solidity",
           "^",
@@ -58,9 +58,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 4325,
+        "id": 4286,
         "linearizedBaseContracts": [
-          4325
+          4286
         ],
         "name": "ERC223ReceivingContract",
         "nodeType": "ContractDefinition",
@@ -68,22 +68,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 4324,
+            "id": 4285,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "tokenFallback",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4322,
+              "id": 4283,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4317,
+                  "id": 4278,
                   "name": "_from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4324,
+                  "scope": 4285,
                   "src": "86:13:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -92,7 +92,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4316,
+                    "id": 4277,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "86:7:10",
@@ -107,10 +107,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4319,
+                  "id": 4280,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4324,
+                  "scope": 4285,
                   "src": "101:11:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -119,7 +119,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4318,
+                    "id": 4279,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "101:4:10",
@@ -133,64 +133,64 @@
                 },
                 {
                   "constant": false,
-                  "id": 4321,
+                  "id": 4282,
                   "name": "_data",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4324,
-                  "src": "114:13:10",
+                  "scope": 4285,
+                  "src": "114:18:10",
                   "stateVariable": false,
-                  "storageLocation": "default",
+                  "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 4320,
-                    "name": "uint256",
+                    "id": 4281,
+                    "name": "bytes",
                     "nodeType": "ElementaryTypeName",
-                    "src": "114:7:10",
+                    "src": "114:5:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "85:43:10"
+              "src": "85:48:10"
             },
             "returnParameters": {
-              "id": 4323,
+              "id": 4284,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "135:0:10"
+              "src": "140:0:10"
             },
-            "scope": 4325,
-            "src": "63:73:10",
+            "scope": 4286,
+            "src": "63:78:10",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 4326,
-        "src": "25:113:10"
+        "scope": 4287,
+        "src": "25:118:10"
       }
     ],
-    "src": "0:138:10"
+    "src": "0:143:10"
   },
   "legacyAST": {
     "absolutePath": "/home/jordi/ws/jordiescudero/bloomen-wallet/bloomen-wallet-truffle/contracts/bloomen/token/ERC223ReceivingContract.sol",
     "exportedSymbols": {
       "ERC223ReceivingContract": [
-        4325
+        4286
       ]
     },
-    "id": 4326,
+    "id": 4287,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 4315,
+        "id": 4276,
         "literals": [
           "solidity",
           "^",
@@ -206,9 +206,9 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 4325,
+        "id": 4286,
         "linearizedBaseContracts": [
-          4325
+          4286
         ],
         "name": "ERC223ReceivingContract",
         "nodeType": "ContractDefinition",
@@ -216,22 +216,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 4324,
+            "id": 4285,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "tokenFallback",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 4322,
+              "id": 4283,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 4317,
+                  "id": 4278,
                   "name": "_from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4324,
+                  "scope": 4285,
                   "src": "86:13:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -240,7 +240,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 4316,
+                    "id": 4277,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "86:7:10",
@@ -255,10 +255,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 4319,
+                  "id": 4280,
                   "name": "_value",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4324,
+                  "scope": 4285,
                   "src": "101:11:10",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -267,7 +267,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 4318,
+                    "id": 4279,
                     "name": "uint",
                     "nodeType": "ElementaryTypeName",
                     "src": "101:4:10",
@@ -281,51 +281,51 @@
                 },
                 {
                   "constant": false,
-                  "id": 4321,
+                  "id": 4282,
                   "name": "_data",
                   "nodeType": "VariableDeclaration",
-                  "scope": 4324,
-                  "src": "114:13:10",
+                  "scope": 4285,
+                  "src": "114:18:10",
                   "stateVariable": false,
-                  "storageLocation": "default",
+                  "storageLocation": "memory",
                   "typeDescriptions": {
-                    "typeIdentifier": "t_uint256",
-                    "typeString": "uint256"
+                    "typeIdentifier": "t_bytes_memory_ptr",
+                    "typeString": "bytes"
                   },
                   "typeName": {
-                    "id": 4320,
-                    "name": "uint256",
+                    "id": 4281,
+                    "name": "bytes",
                     "nodeType": "ElementaryTypeName",
-                    "src": "114:7:10",
+                    "src": "114:5:10",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_uint256",
-                      "typeString": "uint256"
+                      "typeIdentifier": "t_bytes_storage_ptr",
+                      "typeString": "bytes"
                     }
                   },
                   "value": null,
                   "visibility": "internal"
                 }
               ],
-              "src": "85:43:10"
+              "src": "85:48:10"
             },
             "returnParameters": {
-              "id": 4323,
+              "id": 4284,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "135:0:10"
+              "src": "140:0:10"
             },
-            "scope": 4325,
-            "src": "63:73:10",
+            "scope": 4286,
+            "src": "63:78:10",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 4326,
-        "src": "25:113:10"
+        "scope": 4287,
+        "src": "25:118:10"
       }
     ],
-    "src": "0:138:10"
+    "src": "0:143:10"
   },
   "compiler": {
     "name": "solc",
@@ -333,7 +333,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-04-18T09:46:08.663Z",
+  "updatedAt": "2019-04-23T12:02:46.620Z",
   "devdoc": {
     "methods": {}
   },
