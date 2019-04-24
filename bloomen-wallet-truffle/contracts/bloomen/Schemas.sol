@@ -37,15 +37,15 @@ contract Schemas is WhitelistedRole {
     return (schemasArray_);
   }
 
-  function createSchema(uint256 _schemaId, bytes memory _data) public onlyWhitelistAdmin  {
+  function createSchema(uint256 _schemaId, bytes memory _data) public onlyWhitelisted  {
     _createSchema(_schemaId, _data);  
   }
 
-  function invalidateSchema(uint256 _schemaId) public  onlyWhitelistAdmin {
+  function invalidateSchema(uint256 _schemaId) public  onlyWhitelisted {
     _schemaStatus(_schemaId, false);  
   }
 
-  function validateSchema(uint256 _schemaId) public onlyWhitelistAdmin  {
+  function validateSchema(uint256 _schemaId) public onlyWhitelisted  {
     _schemaStatus(_schemaId, true);  
   }
 

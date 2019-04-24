@@ -18,7 +18,7 @@ contract DappContainerFactory is WhitelistedRole {
 
   Container[] private containers_;
 
-  function createContainer(bytes memory _in, string memory _name) onlyWhitelistAdmin public {
+  function createContainer(bytes memory _in, string memory _name) onlyWhitelisted public {
     RLPReader.RLPItem memory item = _in.toRlpItem();
     RLPReader.RLPItem[] memory itemList = item.toList();
 
@@ -33,9 +33,10 @@ contract DappContainerFactory is WhitelistedRole {
       data[i] = pathValue;
     } 
 
-    DappContainer container = new DappContainer();
+    DappContainer container = new DappContainer();    
+    container.addWhitelisted(msg.sender);
+    container.addWhitelisted(address(this));
     container.initialize(data);
-    container.addWhitelisted(tx.origin);
 
     containers_.push(Container(address(container), _name)); 
   }

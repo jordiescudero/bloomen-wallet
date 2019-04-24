@@ -45,7 +45,7 @@ contract DappContainer is WhitelistedRole {
     
   }
 
-  function initialize(PathValue[] memory _data) onlyWhitelistAdmin public {
+  function initialize(PathValue[] memory _data) onlyWhitelisted public {
     uint dataLength = _data.length;
     for (uint i = 0;i < dataLength; i++) {
       PathValue memory pathValue = _data[i];

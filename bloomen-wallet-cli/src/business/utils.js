@@ -100,9 +100,13 @@ async function _u3() {
     for (i=0;i<cardNumber;i++){
         const secret = 'card://' + uuidv4();
         const randomId = getRandomId();
-        await _addCard(ctx,randomId,amount,secret);
-        await _activateCard(ctx,randomId);
-        cards.push({ id: randomId, secret: secret, active: true, points: amount});        
+        try {
+            await _addCard(ctx,randomId,amount,secret);
+            await _activateCard(ctx,randomId);
+            cards.push({ id: randomId, secret: secret, active: true, points: amount});
+        } catch (err) {
+            console.log(err);
+        }     
     }
     common.setCards(cards);    
 }

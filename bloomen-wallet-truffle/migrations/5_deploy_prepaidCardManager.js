@@ -2,7 +2,7 @@
 var ERC223 = artifacts.require("./bloomen/token/ERC223");
 var PrepaidCardManager = artifacts.require("./bloomen/PrepaidCardManager");
 
-module.exports = function(deployer) {
+module.exports = function(deployer,network) {
   var _erc223, _prepaidCardManager;
   deployer
   .then(() => ERC223.deployed())
@@ -12,5 +12,7 @@ module.exports = function(deployer) {
   }).then((instance) => {
     _prepaidCardManager=instance;
     return _erc223.addMinter(_prepaidCardManager.address);
+  }).then(() => {    
+    return _prepaidCardManager.addWhitelisted(deployer.networks[network].from);    
   });
 };

@@ -196,8 +196,12 @@ async function _sp7() {
     ];
     let answer = await inquirer.prompt(questions);
     let json = JSON.parse(fs.readFileSync('./data/dapp/' + answer.file, 'utf8'));
-    await _createContainer(json, answer.name);
-    console.log(answer.name + ' container created.');
+    try{
+        await _createContainer(json, answer.name);
+        console.log(answer.name + ' container created.');
+    } catch(err) {
+        console.log(err);
+    }
 }
 
 function _createContainer(json, name) {
