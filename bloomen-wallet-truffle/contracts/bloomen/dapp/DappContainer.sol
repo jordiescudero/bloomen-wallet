@@ -25,11 +25,13 @@ contract DappContainer is WhitelistedRole {
   function getData() public view returns (PathValue[] memory) {
     return data_;
   }
-
+  
   function update(bytes memory _in) onlyWhitelisted public {
+    
     RLPReader.RLPItem memory item = _in.toRlpItem();
     RLPReader.RLPItem[] memory itemList = item.toList();
     uint listLength = itemList.length;
+    
     for (uint i = 0; i < listLength; i++) {
       uint difference = itemList[i].toList()[3].toUint();
       if (difference == 0) { //addition
@@ -40,9 +42,10 @@ contract DappContainer is WhitelistedRole {
         _modifyPath(string(itemList[i].toList()[0].toBytes()), string(itemList[i].toList()[1].toBytes()), string(itemList[i].toList()[2].toBytes()));
       }
     }
+    
   }
 
-  function initialize(PathValue[] memory _data) onlyWhitelisted  public {
+  function initialize(PathValue[] memory _data) onlyWhitelistAdmin public {
     uint dataLength = _data.length;
     for (uint i = 0;i < dataLength; i++) {
       PathValue memory pathValue = _data[i];

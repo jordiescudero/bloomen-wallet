@@ -43,7 +43,7 @@ contract PrepaidCardManager is SignerRole, WhitelistedRole {
     return (cards_[_cardId].cardId, cards_[_cardId].owner, cards_[_cardId].tokens, cards_[_cardId].active);
   }
 
-  function addCard(uint256 _cardId, uint256 _tokens, bytes32 _hash) onlyWhitelisted public {
+  function addCard(uint256 _cardId, uint256 _tokens, bytes32 _hash) onlyWhitelistAdmin public {
     require(_tokens > 0, "empty_tokens");
     require(_cardId > 0, "no_valid_card_id");
     require(cards_[_cardId].initialized == 0, "card_exist");

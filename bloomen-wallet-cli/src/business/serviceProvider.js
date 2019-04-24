@@ -284,8 +284,13 @@ async function _sp9() {
     ];
     let answer = await inquirer.prompt(questions);
     let json = JSON.parse(fs.readFileSync('./data/dapp/'+ answer.file, 'utf8'));
-    await _updateContainer(json, answer.container);   
-    console.log('Container updated.');
+    try {
+        await _updateContainer(json, answer.container); 
+        console.log('Container updated.');  
+    } catch(err) {
+        console.log(err);
+    }
+    
 }
 
 async function _updateContainer(json, address) {

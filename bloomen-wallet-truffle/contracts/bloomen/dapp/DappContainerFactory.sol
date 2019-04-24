@@ -35,7 +35,7 @@ contract DappContainerFactory is WhitelistedRole {
 
     DappContainer container = new DappContainer();
     container.initialize(data);
-    container.addWhitelistAdmin(msg.sender);
+    container.addWhitelisted(tx.origin);
 
     containers_.push(Container(address(container), _name)); 
   }

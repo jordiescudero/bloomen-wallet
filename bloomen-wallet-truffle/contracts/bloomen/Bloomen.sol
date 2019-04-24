@@ -6,18 +6,18 @@ contract Bloomen is WhitelistedRole{
 
   address[] private _dapps;
 
-  function addDapp(address _dappAddress) onlyWhitelisted public {
+  function addDapp(address _dappAddress) onlyWhitelistAdmin public {
     _dapps.push(_dappAddress);
   }
 
-  function deleteDapp(uint _index) onlyWhitelisted public {
+  function deleteDapp(uint _index) onlyWhitelistAdmin public {
     for (uint i = _index; i < _dapps.length-1;i++){
       _dapps[i] = _dapps[i+1];
     }
     _dapps.length--;
   }
 
-  function setDapp(uint _index, address _newAddress) onlyWhitelisted public {
+  function setDapp(uint _index, address _newAddress) onlyWhitelistAdmin public {
     _dapps[_index]=_newAddress;
   }
 
